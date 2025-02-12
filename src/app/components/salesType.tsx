@@ -25,7 +25,9 @@ export default function DeviceStats() {
 
   useEffect(() => {
     const fetchStats = async () => {
-      const response = await fetch("http://localhost:8000/api/sales");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_LOCAL_API_BASE_URL}/api/sales`
+      );
       const data: SalesData[] = await response.json();
       setSalesData(data);
     };
