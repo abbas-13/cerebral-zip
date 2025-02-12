@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html className="h-full" lang="en">
       <body
-        className={`${montserrat.variable} ${lato.variable} p-2 h-full antialiased bg-[rgb(223,226,232)]`}
+        className={`${montserrat.variable} ${lato.variable} p-2 h-full overflow-scroll h-max antialiased bg-[rgb(223,226,232)]`}
       >
         {children}
       </body>
