@@ -29,7 +29,7 @@ export default function ComparisonChart() {
     const fetchStats = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8000/api/sales_comparison"
+          `${process.env.NEXT_PUBLIC_LOCAL_API_BASE_URL}/api/sales_comparison`
         );
         const data: ComparisonData[] = await response.json();
         setComparisonData(data);
