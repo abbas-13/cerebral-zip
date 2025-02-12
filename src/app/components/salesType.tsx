@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import { Card, CardContent, Typography } from "@mui/material";
 import {
   LineChart,
@@ -8,34 +10,101 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  LegendProps,
 } from "recharts";
-import { fetchWithAuth } from "../services/api";
+
+interface SalesData {
+  date: Date; // or Date if you want to convert it to a Date object
+  web_sales: number;
+  offline_sales: number;
+}
 
 export default function DeviceStats() {
-  const [stats, setStats] = useState([]);
+  const [salesData, setSalesData] = useState<SalesData[]>([]);
 
   useEffect(() => {
     const fetchStats = async () => {
-      const data = await fetchWithAuth("/sample_assignment_api_4/");
-      setStats(data);
+      const response = await fetch("http://localhost:8000/api/sales");
+      const data: SalesData[] = await response.json();
+      setSalesData(data);
     };
     fetchStats();
   }, []);
 
+  const CustomLegend: React.FC<LegendProps> = ({ payload }) => (
+    <div className="flex justify-center">
+      {payload?.map((entry, index) => (
+        <div
+          key={`item-${index}`}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            fontSize: 12,
+            color: "#4a4a4a",
+            margin: "0 10px",
+          }}
+        >
+          <div
+            style={{
+              width: 10,
+              height: 10,
+              backgroundColor: entry.color,
+              marginRight: 5,
+            }}
+          ></div>
+          {entry.value === "web_sales" ? "Web Sales" : "Offline Sales"}
+        </div>
+      ))}
+    </div>
+  );
+
   return (
-    <Card>
+    <Card
+      sx={{
+        display: "flex",
+        width: "100%",
+        borderRadius: "0.7rem",
+        boxShadow: "none",
+      }}
+    >
       <CardContent>
-        <Typography variant="h6" gutterBottom>
+        <Typography
+          variant="h6"
+          sx={{ fontFamily: "Lato, sans-serif", marginBottom: "2rem" }}
+          gutterBottom
+        >
           Customers by device
         </Typography>
-        <LineChart width={400} height={200} data={stats}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
+
+        <LineChart
+          height={180}
+          width={300}
+          style={{ marginLeft: "-20px" }}
+          data={salesData}
+        >
+          <XAxis dataKey="Date" tick={false} axisLine={false} />
+          <YAxis
+            axisLine={false}
+            tick={{ fontSize: 12 }}
+            ticks={[0, 4000, 8000]}
+            tickFormatter={(value) => `${value / 1000}k`}
+            domain={[0, 8000]}
+          />
+          <CartesianGrid horizontal={true} vertical={false} stroke="#e0e0e0" />
           <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="web_sales" stroke="#8884d8" />
-          <Line type="monotone" dataKey="offline_sales" stroke="#82ca9d" />
+          <Legend content={<CustomLegend />} />
+          <Line
+            type="monotone"
+            dot={false}
+            dataKey="web_sales"
+            stroke="#335AF1"
+          />
+          <Line
+            type="monotone"
+            dot={false}
+            dataKey="offline_sales"
+            stroke="#B6EAFD"
+          />
         </LineChart>
       </CardContent>
     </Card>

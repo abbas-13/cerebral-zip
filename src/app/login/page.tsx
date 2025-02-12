@@ -16,7 +16,6 @@ const Login: React.FC = () => {
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target);
     setLoginForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -37,7 +36,7 @@ const Login: React.FC = () => {
         }
       );
       if (response.statusText === "OK") {
-        router.push("/Dashboard");
+        router.push("/homePage");
       }
     } catch (err) {
       console.error(err);
