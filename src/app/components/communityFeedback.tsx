@@ -1,58 +1,67 @@
+"use client";
+
 import { useEffect, useState } from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  LinearProgress,
-  Box,
-} from "@mui/material";
-import { fetchWithAuth } from "../services/api";
+import { CardContent, Typography, Card } from "@mui/material";
+import { fetchData } from "../utils/api";
+import RatingBar from "./ratingBar";
+
+interface FeedbackData {
+  negative: number;
+  positive: number;
+  neutral: number;
+}
 
 export default function CommunityFeedback() {
-  const [feedback, setFeedback] = useState(null);
+  const [feedback, setFeedback] = useState<FeedbackData | null>(null);
 
   useEffect(() => {
-    const fetchFeedback = async () => {
-      const data = await fetchWithAuth("/sample_assignment_api_5/");
-      setFeedback(data);
+    const fetchCommunityFeedback = async () => {
+      try {
+        const data = await fetchData(5);
+        setFeedback(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
-    fetchFeedback();
+    fetchCommunityFeedback();
   }, []);
 
   return (
-    <Card sx={{ mt: 2 }}>
+    <Card
+      sx={{
+        display: "flex",
+        width: "100%",
+        flexDirection: "column",
+        borderRadius: "0.7rem",
+        boxShadow: "none",
+      }}
+    >
       <CardContent>
-        <Typography variant="h6" gutterBottom>
+        <Typography
+          sx={{
+            fontFamily: "Lato, sans-serif",
+            marginBottom: "1rem",
+            fontSize: "0.8rem",
+          }}
+          gutterBottom
+        >
           Community Feedback
         </Typography>
-        {feedback && (
-          <>
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle2">Positive</Typography>
-              <LinearProgress
-                variant="determinate"
-                value={(feedback.positive / feedback.total) * 100}
-                color="success"
-              />
-            </Box>
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle2">Neutral</Typography>
-              <LinearProgress
-                variant="determinate"
-                value={(feedback.neutral / feedback.total) * 100}
-                color="warning"
-              />
-            </Box>
-            <Box>
-              <Typography variant="subtitle2">Negative</Typography>
-              <LinearProgress
-                variant="determinate"
-                value={(feedback.negative / feedback.total) * 100}
-                color="error"
-              />
-            </Box>
-          </>
-        )}
+        <RatingBar data={feedback} />
+        <div className="flex gap-3 w-full mt-6">
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-medium">Negative</span>
+            <span className="text-sm font-bold">{feedback?.negative}</span>
+          </div>
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-medium">Neutral</span>
+            <span className="text-sm font-bold">{feedback?.neutral}</span>
+          </div>
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-medium">Positive</span>
+            <span className="text-sm font-bold">{feedback?.positive}</span>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

@@ -6,6 +6,7 @@
   --background: #ffffff;
   --foreground: #171717;
   --font-montserrat: "Montserrat", sans-serif;
+  --font-lato: "Lato", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,5 +19,5 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: montserrat, sans-serif;
+  font-family: var(--font-montserrat), var(--font-lato), sans-serif;
 }

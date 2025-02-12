@@ -1,44 +1,61 @@
+"use client";
+
 import { useEffect, useState } from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  CircularProgress,
-  Box,
-} from "@mui/material";
-import { fetchWithAuth } from "../services/api";
+import { CardContent, Typography, Card, Grid2, Box } from "@mui/material";
+import { fetchData } from "../utils/api";
+import { SemiProgress } from "./semiProgress";
+
+interface PerformanceData {
+  message: string;
+  score: number;
+  title: string;
+}
 
 export default function PerformanceGauge() {
-  const [performance, setPerformance] = useState(null);
+  const [performanceData, setPerformanceData] = useState<PerformanceData>();
 
   useEffect(() => {
-    const fetchPerformance = async () => {
-      const data = await fetchWithAuth("/sample_assignment_api_3/");
-      setPerformance(data);
+    const fetchPerformanceData = async () => {
+      try {
+        const data = await fetchData(3);
+        setPerformanceData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
-    fetchPerformance();
+    fetchPerformanceData();
   }, []);
 
   return (
-    <Card>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Performance Score
-        </Typography>
-        <Box display="flex" justifyContent="center" alignItems="center">
-          <CircularProgress
-            variant="determinate"
-            value={performance?.score || 0}
-            size={120}
-          />
+    <Card
+      sx={{
+        display: "flex",
+        borderRadius: "0.7rem",
+        boxShadow: "none",
+        width: "100%",
+      }}
+    >
+      <CardContent sx={{ paddingBottom: "0 !important" }}>
+        <Grid2 container direction={"row"}>
+          <Box className="w-full flex justify-center border-b-[1px] pb-4 mb-4">
+            <SemiProgress value={performanceData ? performanceData.score : 0} />
+          </Box>
           <Typography
-            variant="h4"
+            sx={{
+              fontFamily: "Lato, sans-serif",
+              fontSize: "1rem",
+            }}
             component="div"
-            sx={{ position: "absolute" }}
           >
-            {performance?.score || 0}
+            {`${performanceData?.title}!` || ""}
           </Typography>
-        </Box>
+          <Typography
+            sx={{ fontFamily: "Lato, sans-serif", fontSize: "0.9rem" }}
+            component="div"
+          >
+            {`${performanceData?.message}!` || ""}
+          </Typography>
+        </Grid2>
       </CardContent>
     </Card>
   );
