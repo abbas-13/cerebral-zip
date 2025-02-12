@@ -13,7 +13,6 @@ export default function AppShell({ children }: AppshelProps) {
         display: "flex",
         gap: "1rem",
         padding: "0.5rem",
-        height: "100%",
         width: "100%",
         borderRadius: 3,
         backgroundColor: "rgb(243, 243, 247)",

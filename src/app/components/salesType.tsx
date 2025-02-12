@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
   LegendProps,
+  ResponsiveContainer,
 } from "recharts";
 
 interface SalesData {
@@ -67,7 +68,7 @@ export default function DeviceStats() {
         boxShadow: "none",
       }}
     >
-      <CardContent>
+      <CardContent sx={{ width: "100%" }}>
         <Typography
           variant="h6"
           sx={{ fontFamily: "Lato, sans-serif", marginBottom: "2rem" }}
@@ -75,37 +76,42 @@ export default function DeviceStats() {
         >
           Customers by device
         </Typography>
-
-        <LineChart
-          height={180}
-          width={300}
-          style={{ marginLeft: "-20px" }}
-          data={salesData}
-        >
-          <XAxis dataKey="Date" tick={false} axisLine={false} />
-          <YAxis
-            axisLine={false}
-            tick={{ fontSize: 12 }}
-            ticks={[0, 4000, 8000]}
-            tickFormatter={(value) => `${value / 1000}k`}
-            domain={[0, 8000]}
-          />
-          <CartesianGrid horizontal={true} vertical={false} stroke="#e0e0e0" />
-          <Tooltip />
-          <Legend content={<CustomLegend />} />
-          <Line
-            type="monotone"
-            dot={false}
-            dataKey="web_sales"
-            stroke="#335AF1"
-          />
-          <Line
-            type="monotone"
-            dot={false}
-            dataKey="offline_sales"
-            stroke="#B6EAFD"
-          />
-        </LineChart>
+        <ResponsiveContainer width="100%" height={180}>
+          <LineChart
+            height={180}
+            width={300}
+            style={{ marginLeft: "-20px" }}
+            data={salesData}
+          >
+            <XAxis dataKey="Date" tick={false} axisLine={false} />
+            <YAxis
+              axisLine={false}
+              tick={{ fontSize: 12 }}
+              ticks={[0, 4000, 8000]}
+              tickFormatter={(value) => `${value / 1000}k`}
+              domain={[0, 8000]}
+            />
+            <CartesianGrid
+              horizontal={true}
+              vertical={false}
+              stroke="#e0e0e0"
+            />
+            <Tooltip />
+            <Legend content={<CustomLegend />} />
+            <Line
+              type="monotone"
+              dot={false}
+              dataKey="web_sales"
+              stroke="#335AF1"
+            />
+            <Line
+              type="monotone"
+              dot={false}
+              dataKey="offline_sales"
+              stroke="#B6EAFD"
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </CardContent>
     </Card>
   );

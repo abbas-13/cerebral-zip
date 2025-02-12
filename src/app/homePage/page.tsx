@@ -9,10 +9,15 @@ export default function HomePage() {
   return (
     <AppShell>
       <Grid container spacing={1} sx={{ width: "100%" }}>
-        <Grid size={{ xs: 6, md: 8.5 }}>
+        <Grid size={{ xs: 6, md: 8.5, lg: 9.5 }}>
           <Dashboard />
         </Grid>
-        <Grid container direction="row" spacing={1} size={{ md: 3.5 }}>
+        <Grid
+          container
+          direction="row"
+          spacing={1}
+          size={{ xs: 4, md: 3.5, lg: 2.5 }}
+        >
           <PerformanceGauge />
           <DeviceStats />
           <CommunityFeedback />
